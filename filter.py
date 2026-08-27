@@ -1,9 +1,10 @@
+import json as simplejson
+import os
+import sys
+
 import xbmc
 import xbmcaddon
 import xbmcvfs
-import os
-import sys
-import json as simplejson
 
 __addon__ = xbmcaddon.Addon()
 __addonversion__ = __addon__.getAddonInfo('version')
@@ -20,7 +21,7 @@ monitor = xbmc.Monitor()
 def log_message(message, level=xbmc.LOGDEBUG):
     if LOG_DEBUG:
         for line in message.splitlines():
-            xbmc.log(msg="{0}: {1}".format(__addonname__.encode("utf-8"), line.encode("utf-8")), level=level)
+            xbmc.log(msg="{}: {}".format(__addonname__.encode("utf-8"), line.encode("utf-8")), level=level)
 
 class SubtitleFilteredPlayer(xbmc.Player):
     def __init__(self):
@@ -34,14 +35,18 @@ class SubtitleFilteredPlayer(xbmc.Player):
         self.get_subtitles()
         self.process_subtitles()
 
+    def should_change_subtitle(self, sub):
+        if sub['language'] != self.selected_sub['language']:
+            return False
+        return sub['isforced'] or any(x in sub['name'].lower() for x in ['forced', 'forcé', 'foreign'])
+
     def process_subtitles(self):
         if 'language' in self.selected_sub and len(self.subtitles) > 1:
-            preferred_language = self.selected_sub['language']
-            log_message('preferred language: [' + preferred_language + ']')
+            log_message('preferred language: [' + self.selected_sub['language'] + ']')
             for sub in self.subtitles:
                 log_message('found subtitle: [' + str(sub['index']) + '] ===>' + str(sub))
                 ## finds first subtitle stream of the same language as already selected but which is NOT marked as forced
-                if sub['language'] == preferred_language and not (sub['isforced'] is True or sub['name'].lower().find('forced') != -1):
+                if self.should_change_subtitle(sub):
                     self.setSubtitleStream(sub['index'])
                     log_message('subtitle changed')
                     break

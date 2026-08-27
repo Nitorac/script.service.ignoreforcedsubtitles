@@ -2,8 +2,8 @@
 <addon
 	id="script.service.ignoreforcedsubtitles"
 	name="Ignore Forced Subtitles"
-	version="0.1.9"
-	provider-name="aph"
+	version="0.2.0"
+	provider-name="Nitorac"
 	>
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
@@ -14,9 +14,8 @@
         <license>GPL-2.0-only</license>
 		<summary lang="en_GB">Ignore Forced Subtitles</summary>
 		<description lang="en_GB">This service sets the subtitle track based on your language preferences, while also skipping any forced subtitles.</description>
-		<disclaimer lang="en_GB">Thanks ChatGPT for your support :)</disclaimer>
 		<platform>all</platform>
-		<news>Updated with changes required for Kodi 19 / Python 3</news>
+		<news></news>
 		<assets>
     		<icon>resources/icon.png</icon>
 		</assets>

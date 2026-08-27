@@ -1,0 +1,23 @@
+name: CI
+
+on: push  
+
+jobs:
+  ruff:
+    name: Run Ruff linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out plugin repository
+        uses: actions/checkout@v7
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.12
+      - name: Install Ruff
+        run: pip install ruff
+      - name: Run Ruff
+        uses: wearerequired/lint-action@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          continue_on_error: false
+          ruff: true
